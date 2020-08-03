@@ -18,6 +18,15 @@ class Filter
 
             $rules = explode('|', $stringRules);
 
+            // If a trim exists it will be executed last
+            if (in_array('trim', $rules)) {
+                $key = array_search('trim', $rules);
+                if ($key < array_key_last($rules)) {
+                    unset($rules[$key]);
+                    array_push($rules, 'trim');
+                }
+            }
+
             foreach ($rules as $rule) {
 
                 if (! method_exists(__CLASS__, $rule)) {
