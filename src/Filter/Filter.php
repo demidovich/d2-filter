@@ -27,9 +27,11 @@ class Filter
                 }
             }
 
+            $class = get_called_class();
+
             foreach ($rules as $rule) {
 
-                if (! method_exists(get_called_class(), $rule)) {
+                if (! method_exists($class, $rule)) {
                     throw new \RuntimeException("Non-existent filtering rule \"{$rule}\"");
                 }
 
@@ -37,7 +39,7 @@ class Filter
                     continue;
                 }
 
-                $input[$param] = self::$rule($input[$param]);
+                $input[$param] = $class::$rule($input[$param]);
             }
         }
 

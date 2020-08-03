@@ -5,6 +5,7 @@ namespace Tests;
 use PHPUnit\Framework\TestCase;
 use D2\Filter\Filter;
 use RuntimeException;
+use Tests\Stubs\MyFilter;
 
 class FilterTest extends TestCase
 {
@@ -54,5 +55,15 @@ class FilterTest extends TestCase
         $rules = ['field' => 'trim|not_existing_rule'];
 
         $filtered = Filter::apply($rules, $input);
+    }
+
+    public function test_custom_filter()
+    {
+        $input = ['amount' => '100,00'];
+        $rules = ['amount' => 'money'];
+
+        $filtered = MyFilter::apply($rules, $input);
+
+        $this->assertEquals('100.00', $filtered['amount']);
     }
 }
