@@ -3,34 +3,19 @@
 Class preparation of input data before validation.
 
 ```
-$input = Filter::apply([
+$raw = [
+    'email' => 'MyEmail@gmail.com',
+    'text'  => 'Some text <br> ',
+    'phone' => '+7 (000) 000-00-00',
+];
+
+$data = Filter::apply([
     'email' => 'trim|to_lower',
-    'text'  => 'string|trim',
-    'name'  => 'string|trim',
-    'phone' => 'digits_only|trim'
-], $data);
-```
+    'text'  => 'trim|string',
+    'phone' => 'digits_only'
+], $raw);
 
-```
-$filter = new Filter();
-$filter->singleSpaces();
-$filter->trim();
-
-$filter->param('email');
-$filter->param('text')->stripTags();
-$filter->param('name')->stripTags()->stripSpecialshars();
-$filter->param('phone')->onlyDigits();
-
-$input = $filter->apply(
-    $request->toArray()
-);
-```
-
-```
-$input = (new Filter([
-    'email' => 'trim',
-    'text'  => 'stripTags|trim',
-    'name'  => 'stripTags|stripSpecialshars|trim',
-    'phone' => 'onlyDigits|trim'
-]))->apply($data);
+// $data['email'] : 'myemail@gmail.com'
+// $data['text']  : 'Some text'
+// $data['phone'] : '70000000000'
 ```
