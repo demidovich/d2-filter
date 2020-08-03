@@ -2,6 +2,18 @@
 
 Class preparation of input data before validation.
 
+Available rules:
+
+* digits_only
+* sanitize_string
+* strip_tags
+* strip_repeat_spaces
+* to_upper
+* to_lower
+* trim
+
+Example of usage
+
 ```
 $raw = [
     'email' => 'MyEmail@gmail.com',
@@ -20,7 +32,7 @@ $data = Filter::apply([
 // $data['phone'] : '70000000000'
 ```
 
-Custom rules implementation.
+Example of custom rule implementation
 
 ```
 class MyFilter extends Filter

@@ -36,15 +36,14 @@ class FilterTest extends TestCase
         $this->assertEquals($cleanValue, $filtered['field']);
     }
 
-    public function test_non_string_value()
+    public function test_non_scalar_value()
     {
-        $input = ['field' => 1234];
+        $input = ['field' => new \stdClass()];
         $rules = ['field' => 'trim|strip_tags'];
 
         $filtered = Filter::apply($rules, $input);
 
-        $this->assertEquals('integer', gettype($filtered['field']));
-        $this->assertEquals($input['field'], $filtered['field']);
+        $this->assertEquals('object', gettype($filtered['field']));
     }
 
     public function test_not_existing_rule_Exception()

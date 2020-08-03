@@ -35,7 +35,7 @@ class Filter
                     throw new \RuntimeException("Non-existent filtering rule \"{$rule}\"");
                 }
 
-                if (! is_string($input[$param])) {
+                if (! is_scalar($input[$param])) {
                     continue;
                 }
 
@@ -49,37 +49,37 @@ class Filter
     /**
      * Escape, strip tags, specialchars
      */
-    protected static function sanitize_string(string $value)
+    protected static function sanitize_string($value)
     {
         return filter_var($value, FILTER_SANITIZE_STRING);
     }
 
-    protected static function trim(string $value)
+    protected static function trim($value)
     {
         return trim($value);
     }
 
-    protected static function strip_tags(string $value)
+    protected static function strip_tags($value)
     {
         return strip_tags($value);
     }
 
-    protected static function strip_repeat_spaces(string $value)
+    protected static function strip_repeat_spaces($value)
     {
         return preg_replace('/\s+/u', ' ', $value);
     }
 
-    protected static function digits_only(string $value)
+    protected static function digits_only($value)
     {
         return preg_replace('/[^0-9]/si', '', $value);
     }
 
-    protected static function to_upper(string $value)
+    protected static function to_upper($value)
     {
         return mb_strtoupper($value, 'utf-8');
     }
 
-    protected static function to_lower(string $value)
+    protected static function to_lower($value)
     {
         return mb_strtolower($value, 'utf-8');
     }
