@@ -1,6 +1,6 @@
 <?php
 
-use Performance\ExampleCommand;
+use D2\Filter\Filter;
 
 $autoload = __DIR__.'/../vendor/autoload.php';
 
@@ -12,12 +12,20 @@ require_once $autoload;
 
 $started = hrtime(true);
 
-$build = function() {
-    // test code
-};
+$data = [
+    'email' => 'MyEmail@GMAIL.com',
+    'title' => ' Title<br> ',
+    'text'  => ' Text<br> text     text<br>$#@ <> text',
+];
+
+$rules = [
+    'email' => 'to_lower|trim',
+    'title' => 'sanitize_string|trim',
+    'text'  => 'sanitize_string|trim',
+];
 
 for ($i = 1; $i <= 1000; $i++) {
-    $build();
+    $data = Filter::apply($rules, $data);
     if ($i === 2) {
         $finished2 = hrtime(true);
     }
