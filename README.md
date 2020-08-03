@@ -12,10 +12,30 @@ $raw = [
 $data = Filter::apply([
     'email' => 'trim|to_lower',
     'text'  => 'trim|string',
-    'phone' => 'digits_only'
+    'phone' => 'digits_only',
 ], $raw);
 
 // $data['email'] : 'myemail@gmail.com'
 // $data['text']  : 'Some text'
 // $data['phone'] : '70000000000'
+```
+
+Custom rules implementation.
+
+```
+class MyFilter extends Filter
+{
+    protected static function money($value)
+    {
+        return str_replace(",", ".", $value);
+    }
+}
+
+$raw = [
+    'amount' => '100,00',
+];
+
+$data = Filter::apply([
+    'amount' => 'trim|money',
+], $raw);
 ```
