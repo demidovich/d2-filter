@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/demidovich/d2-filter.svg?branch=master)](https://travis-ci.com/demidovich/d2-filter) [![codecov](https://codecov.io/gh/demidovich/d2-filter/branch/master/graph/badge.svg)](https://codecov.io/gh/demidovich/d2-filter)
+
 ## d2 filter
 
 Class preparation of input data before validation.
@@ -14,7 +16,7 @@ Available rules:
 
 Example of usage
 
-```
+```php
 $raw = [
     'email' => 'MyEmail@gmail.com',
     'text'  => 'Some text <br> ',
@@ -34,7 +36,7 @@ $data = Filter::apply([
 
 Example of custom rule implementation
 
-```
+```php
 class MyFilter extends Filter
 {
     protected static function money($value)

@@ -1,0 +1,29 @@
+sudo: false
+
+language: php
+
+php:
+  - 7.4
+
+before_install:
+  - sudo pip install codecov
+
+before_script:
+  - composer self-update
+  - composer install --no-interaction --prefer-source --dev
+  - phpenv rehash
+
+script:
+  - vendor/bin/phpunit --verbose --colors --coverage-clover=coverage.xml
+
+branches:
+  only:
+  - master
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+after_success:
+  - codecov
+
