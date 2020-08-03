@@ -2,7 +2,7 @@
 
 Class preparation of input data before validation.
 
-```
+```php
 $raw = [
     'email' => 'MyEmail@gmail.com',
     'text'  => 'Some text <br> ',
@@ -22,7 +22,7 @@ $data = Filter::apply([
 
 Custom rules implementation.
 
-```
+```php
 class MyFilter extends Filter
 {
     protected static function money($value)
