@@ -29,7 +29,7 @@ class Filter
 
             foreach ($rules as $rule) {
 
-                if (! method_exists(__CLASS__, $rule)) {
+                if (! method_exists(get_called_class(), $rule)) {
                     throw new \RuntimeException("Non-existent filtering rule \"{$rule}\"");
                 }
 
@@ -47,37 +47,37 @@ class Filter
     /**
      * Escape, strip tags, specialchars
      */
-    private static function sanitize_string(string $value)
+    protected static function sanitize_string(string $value)
     {
         return filter_var($value, FILTER_SANITIZE_STRING);
     }
 
-    private static function trim(string $value)
+    protected static function trim(string $value)
     {
         return trim($value);
     }
 
-    private static function strip_tags(string $value)
+    protected static function strip_tags(string $value)
     {
         return strip_tags($value);
     }
 
-    private static function strip_repeat_spaces(string $value)
+    protected static function strip_repeat_spaces(string $value)
     {
         return preg_replace('/\s+/u', ' ', $value);
     }
 
-    private static function digits_only(string $value)
+    protected static function digits_only(string $value)
     {
         return preg_replace('/[^0-9]/si', '', $value);
     }
 
-    private static function to_upper(string $value)
+    protected static function to_upper(string $value)
     {
         return mb_strtoupper($value, 'utf-8');
     }
 
-    private static function to_lower(string $value)
+    protected static function to_lower(string $value)
     {
         return mb_strtolower($value, 'utf-8');
     }
