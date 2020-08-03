@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker exec -ti d2-sanitizer php /app/performance/performance.php

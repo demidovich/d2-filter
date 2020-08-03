@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+docker exec -ti d2-sanitizer /app/vendor/bin/phpunit $@

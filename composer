@@ -1,0 +1,5 @@
+#!/bin/bash
+
+cd "$(dirname "$0")"
+
+docker run --rm -t -v `pwd`:/app --user ${UID}:${GID} d2-sanitizer composer $@
