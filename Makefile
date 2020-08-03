@@ -7,16 +7,16 @@ help: ## This help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 build: ## Build docker image
-	@docker build --build-arg UID=${UID} --build-arg GID=${GID} --tag d2-sanitizer .
+	@docker build --build-arg UID=${UID} --build-arg GID=${GID} --tag d2-filter .
 
 up: build ## Start container
-	@docker run --rm -d --name d2-sanitizer -v $(PWD):/app --user ${UID}:${GID} d2-sanitizer
+	@docker run --rm -d --name d2-filter -v $(PWD):/app --user ${UID}:${GID} d2-filter
 
 down: ## Start container
-	@docker stop d2-sanitizer
+	@docker stop d2-filter
 
 rmi: down ## Remove docker image
-	@docker rmi -f d2-sanitizer
+	@docker rmi -f d2-filter
 
 shell: ## Shell of php container
-	@docker exec -ti --user ${UID}:${GID} d2-sanitizer /bin/bash
+	@docker exec -ti --user ${UID}:${GID} d2-filter /bin/bash
