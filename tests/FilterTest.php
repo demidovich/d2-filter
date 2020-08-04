@@ -46,7 +46,7 @@ class FilterTest extends TestCase
         $this->assertEquals('object', gettype($filtered['field']));
     }
 
-    public function test_not_existing_rule_Exception()
+    public function test_not_existing_rule_exception()
     {
         $this->expectException(RuntimeException::class);
 
@@ -56,7 +56,27 @@ class FilterTest extends TestCase
         $filtered = Filter::apply($rules, $input);
     }
 
-    public function test_custom_filter()
+    public function test_empty_rules()
+    {
+        $input = ['field1' => 1234, 'field2' => true];
+        $rules = [];
+
+        $filtered = Filter::apply($rules, $input);
+
+        $this->assertEquals($input, $filtered);
+    }
+
+    public function test_no_input_param()
+    {
+        $input = ['field1' => '1234'];
+        $rules = ['field1' => 'trim', 'field2' => 'trim'];
+
+        $filtered = Filter::apply($rules, $input);
+
+        $this->assertEquals($input['field1'], $filtered['field1']);
+    }
+
+    public function test_custom_filter_class()
     {
         $input = ['amount' => '100,00'];
         $rules = ['amount' => 'money'];
