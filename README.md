@@ -45,11 +45,8 @@ class MyFilter extends Filter
     }
 }
 
-$raw = [
-    'amount' => '100,00',
-];
+$data  = ['amount' => '100,00'];
+$rules = ['amount' => 'trim|money'];
 
-$data = Filter::apply([
-    'amount' => 'trim|money',
-], $raw);
+$data = MyFilter::apply($rules, $data);
 ```
