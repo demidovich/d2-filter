@@ -9,6 +9,9 @@ use Tests\Stubs\MyFilter;
 
 class FilterTest extends TestCase
 {
+    // Filter::apply($rules, $input);
+    // (new Filter($rules))->apply($input);
+
     public function rules_data()
     {
         return [
@@ -31,7 +34,7 @@ class FilterTest extends TestCase
         $input = ['field' => $dirtyValue];
         $rules = ['field' => $stringRules];
 
-        $filtered = Filter::apply($rules, $input);
+        $filtered = (new Filter($rules))->apply($input);
 
         $this->assertEquals($cleanValue, $filtered['field']);
     }
@@ -41,7 +44,7 @@ class FilterTest extends TestCase
         $input = ['field' => new \stdClass()];
         $rules = ['field' => 'trim|strip_tags'];
 
-        $filtered = Filter::apply($rules, $input);
+        $filtered = (new Filter($rules))->apply($input);
 
         $this->assertEquals('object', gettype($filtered['field']));
     }
@@ -53,7 +56,7 @@ class FilterTest extends TestCase
         $input = ['field' => 'string'];
         $rules = ['field' => 'trim|not_existing_rule'];
 
-        $filtered = Filter::apply($rules, $input);
+        $filtered = (new Filter($rules))->apply($input);
     }
 
     public function test_empty_rules()
@@ -61,7 +64,7 @@ class FilterTest extends TestCase
         $input = ['field1' => 1234, 'field2' => true];
         $rules = [];
 
-        $filtered = Filter::apply($rules, $input);
+        $filtered = (new Filter($rules))->apply($input);
 
         $this->assertEquals($input, $filtered);
     }
@@ -71,7 +74,7 @@ class FilterTest extends TestCase
         $input = ['field1' => '1234'];
         $rules = ['field1' => 'trim', 'field2' => 'trim'];
 
-        $filtered = Filter::apply($rules, $input);
+        $filtered = (new Filter($rules))->apply($input);
 
         $this->assertEquals($input['field1'], $filtered['field1']);
     }
@@ -81,7 +84,7 @@ class FilterTest extends TestCase
         $input = ['amount' => '100,00'];
         $rules = ['amount' => 'money'];
 
-        $filtered = MyFilter::apply($rules, $input);
+        $filtered = (new MyFilter($rules))->apply($input);
 
         $this->assertEquals('100.00', $filtered['amount']);
     }

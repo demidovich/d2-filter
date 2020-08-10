@@ -2,21 +2,29 @@
 
 namespace D2\Filter;
 
+use RuntimeException;
+
 class Filter
 {
-    public static function apply(array $filters, array $input)
+    private $rules = [];
+
+    public function __construct(array $rulesets)
     {
-        if (empty($input) || empty($filters)) {
-            return $input;
-        }
+        $this->load($rulesets);
+    }
 
-        foreach ($filters as $param => $stringRules) {
+    private function load(array $rulesets): void
+    {
+        foreach ($rulesets as $param => $ruleset) {
 
-            if (! isset($input[$param])) {
-                continue;
+            $rules = explode('|', $ruleset);
+            $class = get_called_class();
+
+            foreach ($rules as $ruleMethod) {
+                if (! method_exists($class, $ruleMethod)) {
+                    throw new RuntimeException("Missing filtering method {$class}::{$ruleMethod}()");
+                }
             }
-
-            $rules = explode('|', $stringRules);
 
             // If a trim exists it will be executed last
             if (in_array('trim', $rules)) {
@@ -27,59 +35,68 @@ class Filter
                 }
             }
 
-            $class = get_called_class();
+            $this->rules[$param] = $rules;
+        }
+    }
 
-            foreach ($rules as $rule) {
+    public function apply(array $data): array
+    {
+        if (empty($data) || empty($this->rules)) {
+            return $data;
+        }
 
-                if (! method_exists($class, $rule)) {
-                    throw new \RuntimeException("Non-existent filtering rule \"{$rule}\"");
-                }
+        foreach ($this->rules as $param => $rules) {
 
-                if (! is_scalar($input[$param])) {
-                    continue;
-                }
+            if (! isset($data[$param])) {
+                continue;
+            }
 
-                $input[$param] = $class::$rule($input[$param]);
+            if (! is_scalar($data[$param])) {
+                continue;
+            }
+
+            foreach ($rules as $ruleMethod) {
+                $data[$param] = $this->$ruleMethod($data[$param]);
             }
         }
 
-        return $input;
+        return $data;
     }
 
     /**
      * Escape, strip tags, specialchars
      */
-    protected static function sanitize_string($value)
+    protected function sanitize_string($value)
     {
         return filter_var($value, FILTER_SANITIZE_STRING);
     }
 
-    protected static function trim($value)
+    protected function trim($value)
     {
         return trim($value);
     }
 
-    protected static function strip_tags($value)
+    protected function strip_tags($value)
     {
         return strip_tags($value);
     }
 
-    protected static function strip_repeat_spaces($value)
+    protected function strip_repeat_spaces($value)
     {
         return preg_replace('/\s+/u', ' ', $value);
     }
 
-    protected static function digits_only($value)
+    protected function digits_only($value)
     {
         return preg_replace('/[^0-9]/si', '', $value);
     }
 
-    protected static function to_upper($value)
+    protected function to_upper($value)
     {
         return mb_strtoupper($value, 'utf-8');
     }
 
-    protected static function to_lower($value)
+    protected function to_lower($value)
     {
         return mb_strtolower($value, 'utf-8');
     }

@@ -39,17 +39,19 @@ Example of custom rule implementation
 ```php
 class MyFilter extends Filter
 {
-    protected static function money($value)
+    protected function money($value)
     {
         return str_replace(",", ".", $value);
     }
 }
 
-$raw = [
+$data = [
     'amount' => '100,00',
 ];
 
-$data = Filter::apply([
+$rules = [
     'amount' => 'trim|money',
-], $raw);
+];
+
+$data = (new MyFilter($rules))->apply($raw);
 ```

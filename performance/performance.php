@@ -25,7 +25,7 @@ $rules = [
 ];
 
 for ($i = 1; $i <= 1000; $i++) {
-    $data = Filter::apply($rules, $data);
+    $data = (new Filter($rules))->apply($data);
     if ($i === 2) {
         $finished2 = hrtime(true);
     }
